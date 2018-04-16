@@ -1,3 +1,7 @@
+zcomdezign_platform:
+    resource: "@ZcomdezignPlatformBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
