@@ -8,25 +8,87 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * User
  *
- * @ORM\Table(name="fos_user")
- * @ORM\Entity(repositoryClass="Zcomdezign\PlatformBundle\Repository\UserRepository")
+ * @ORM\Entity
+ * @ORM\Table(name="zcomdezign_user")
  */
 class User extends BaseUser
 {
     /**
-     * @var int
      *
-     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="firstName", type="text", length=255)
+     */
+    private $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastName", type="text", length=255)
+     */
+    private $lastName;    
+    
     public function __construct()
     {
         parent::__construct();
-        // your own logic
+        
+        $this->roles[] = 'ROLE_USER';
+    }
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     *
+     * @return User
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     *
+     * @return User
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
     }
 }
 

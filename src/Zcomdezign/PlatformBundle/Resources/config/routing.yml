@@ -1,3 +1,5 @@
 zcomdezign_platform_homepage:
     path:     /
-    defaults: { _controller: ZcomdezignPlatformBundle:Default:index }
+    defaults: 
+        _controller: ZcomdezignPlatformBundle:Platform:index
+
