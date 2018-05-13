@@ -50,7 +50,7 @@ class Article
     private $user;
     
     /**
-     * @ORM\OneToMany(targetEntity="Zcomdezign\PlatformBundle\Entity\Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="Zcomdezign\PlatformBundle\Entity\Comment", mappedBy="article", cascade={"remove"})
      */
     private $comments;
     
@@ -58,6 +58,7 @@ class Article
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->datePost = new Datetime();
     }
 
     /**
