@@ -20,6 +20,20 @@ class PlatformController extends Controller
 	}
     
     /**
+     * @Route("/blog", name="zcomdezign_platform_blog")
+     */
+	public function blogAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$articles = $em->getRepository('ZcomdezignPlatformBundle:Article')->findAll();
+
+		return $this->render('ZcomdezignPlatformBundle:Default:blog.html.twig', array(
+			'articles' => $articles,
+			));
+	}
+    
+    /**
      * @Route("/creation", name="zcomdezign_platform_creation")
      */
     public function creationAction(Request $request)
@@ -67,6 +81,17 @@ class PlatformController extends Controller
 
 		return $this->render('ZcomdezignPlatformBundle:Default:edition.html.twig', array(
 			'form' => $form->createView(),
+			));
+	}
+    
+    /**
+     * @Route("/article/{id}", name="zcomdezign_platform_article")
+     */
+	public function articleAction(article $article, $id)
+	{
+
+		return $this->render('ZcomdezignPlatformBundle:Default:article.html.twig', array(
+			'article' => $article
 			));
 	}
 }

@@ -1,0 +1,14 @@
+{# src/Zcomdezign/PlatformBundle/Resources/views/Default/blog.html.twig #}
+
+{% extends "ZcomdezignPlatformBundle::layout.html.twig" %}
+
+
+{% block body %}
+	
+	{% for article in articles %}
+		<h3>{{ article.title }}</h3>
+		<p>{{ article.content }}</p>
+		<p><a href="{{ path('zcomdezign_platform_article', { 'id': article.id }) }}">Aperçu</a></p>
+	{% endfor %}
+		
+{% endblock %}
