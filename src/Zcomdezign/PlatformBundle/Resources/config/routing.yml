@@ -2,4 +2,9 @@ zcomdezign_platform_homepage:
     path:     /
     defaults: 
         _controller: ZcomdezignPlatformBundle:Platform:index
+        
+zcomdezign_platform_creation:
+    path:     /creation
+    defaults:
+        _controller: ZcomdezignPlatformBundle:Platform:creation
 
