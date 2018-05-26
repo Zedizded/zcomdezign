@@ -112,7 +112,7 @@ class PlatformController extends Controller
 			$form = $this->get('form.factory')->create(CommentType::class, $comment);
 		}
 
-		$comments = $em->getRepository('ZcomdezignPlatformBundle:Comment')->findBY(array('article' => $article));
+		$comments = $em->getRepository('ZcomdezignPlatformBundle:Comment')->findBY(array('article' => $article), array('id' => 'desc'));
         
         return $this->render('ZcomdezignPlatformBundle:Default:article.html.twig', array(
         
@@ -120,5 +120,22 @@ class PlatformController extends Controller
 			'article' => $article,
 			'comments' => $comments
  			));
+        
+	}
+    
+	/**
+     * @Route("/blog/comment/{id}", name="zcomdezign_platform_signalComment")
+     */
+	public function signalCommentAction(Comment $comment, $id)
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		$comment->setWarning(true);
+		$em->flush();
+
+		$request->getSession()->getFlashBag()->add('info', 'Le commentaire a bien été signalé.');
+
+		return $this->redirectToRoute('zcomdezign_platform_article', array('id' => $comment->getArticle()->getId()));
+    
 	}
 }
