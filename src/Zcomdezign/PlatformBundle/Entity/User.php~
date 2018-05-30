@@ -4,6 +4,7 @@ namespace Zcomdezign\PlatformBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -39,10 +40,24 @@ class User extends BaseUser
      */
     private $zcomdezignMember;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Zcomdezign\PlatformBundle\Entity\Article", mappedBy="user")
+     */
+    private $articles;
+ 
+    /**
+     * @ORM\OneToMany(targetEntity="Zcomdezign\PlatformBundle\Entity\Comment", mappedBy="user")
+     */
+    private $comments;
+    
+    
+    
     public function __construct()
     {
         parent::__construct();
         
+        $this->articles = new ArrayCollection();
+        $this->comments = new ArrayCollection();
         $this->roles[] = 'ROLE_USER';
     }
 
@@ -117,5 +132,72 @@ class User extends BaseUser
     {
         return $this->zcomdezignMember;
     }
-}
+    
+    /**
+     * Add article
+     *
+     * @param \Zcomdezign\PlatformBundle\Entity\Article $article
+     *
+     * @return User
+     */
+    public function addArticle(\Zcomdezign\PlatformBundle\Entity\Article $article)
+    {
+        $this->articles[] = $article;
 
+        return $this;
+    }
+
+    /**
+     * Remove article
+     *
+     * @param \Zcomdezign\PlatformBundle\Entity\Article $article
+     */
+    public function removeArticle(\Zcomdezign\PlatformBundle\Entity\Article $article)
+    {
+        $this->articles->removeElement($article);
+    }
+
+    /**
+     * Get articles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getArticles()
+    {
+        return $this->articles;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \Zcomdezign\PlatformBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\Zcomdezign\PlatformBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \Zcomdezign\PlatformBundle\Entity\Comment $comment
+     */
+    public function removeComment(\Zcomdezign\PlatformBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+}

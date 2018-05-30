@@ -233,3 +233,4 @@ class Article
         return $this->articlePicture;
     }
 }
+
