@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Zcomdezign\PlatformBundle\Entity\User;
 use Zcomdezign\PlatformBundle\Entity\Article;
+use Zcomdezign\PlatformBundle\Entity\ArticlePicture;
 use Zcomdezign\PlatformBundle\Entity\Comment;
 use Zcomdezign\PlatformBundle\Form\ArticleType;
 use Zcomdezign\PlatformBundle\Form\CommentType;
@@ -47,13 +48,23 @@ class PlatformController extends Controller
             
             if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
-				$article->setUser( $this->getUser());
 
 				$em = $this->getDoctrine()->getManager();
-				$em->persist($article);
+                
+                $article->setUser($this->getUser());
+ 				$em->persist($article);
+                
+				$articlePicture = $article->getArticlePicture();
+				if ($articlePicture !== null)
+				{
+					$articlePicture->setAlt($article->getTitle());
+					$articlePicture->setRandom(rand());
+					$em->persist($articlePicture);
+				}
+                
 				$em->flush();
                 
-            $request->getSession()->getFlashBag()->add('info', 'Votre article a bien été enregistrée.');
+            $request->getSession()->getFlashBag()->add('info', "L'article a bien été enregistré.");
 			}
 
 		return $this->render('ZcomdezignPlatformBundle:Default:creation.html.twig', array(
@@ -76,14 +87,23 @@ class PlatformController extends Controller
 			if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
 
 				$em = $this->getDoctrine()->getManager();
+                $articlePicture = $article->getArticlePicture();
+
+				if ($articlePicture !== null)
+				{
+					$articlePicture->setRandom(rand());
+					$articlePicture->setAlt($article->getTitle());
+					$em->persist($articlePicture);
+				}
 				$em->flush();
                 
-            $request->getSession()->getFlashBag()->add('info', 'Votre commentaire a bien été enregistrée.');
+            $request->getSession()->getFlashBag()->add('info', "L'article a bien été enregistré.");
 			}
 
         return $this->render('ZcomdezignPlatformBundle:Default:edition.html.twig', array(
-				'form' => $form->createView()
-				));
+				'form' => $form->createView(),
+                'article' => $article
+            ));
 		}
 		return $this->redirectToRoute('zcomdezign_platform_homepage');
 	}
@@ -151,7 +171,7 @@ class PlatformController extends Controller
 			$em->remove($article);
 			$em->flush();
 
-			$request->getSession()->getFlashBag()->add('info', "L'article a bien été supprimer");
+			$request->getSession()->getFlashBag()->add('info', "L'article a bien été supprimé.");
 
 			return $this->redirectToRoute('fos_user_profile_show');
 		}
@@ -171,7 +191,7 @@ class PlatformController extends Controller
 			$comment->setWarning(false);
 			$em->flush();
 
-			$request->getSession()->getFlashBag()->add('info', "Le commentaire a bien été validé");
+			$request->getSession()->getFlashBag()->add('info', "Le commentaire a bien été validé.");
 
 			return $this->redirectToRoute('fos_user_profile_show');
 		}
@@ -192,13 +212,34 @@ class PlatformController extends Controller
 			$em->remove($comment);
 			$em->flush();
 
-			$request->getSession()->getFlashBag()->add('info', "Le commentaire a bien été supprimé");
+			$request->getSession()->getFlashBag()->add('info', "Le commentaire a bien été supprimé.");
 
 			return $this->redirectToRoute('fos_user_profile_show');
 		}
 
 		return $this->redirectToRoute('zcomdezign_platform_homepage');
 
-	}    
+	}
+    
+    /**
+     * @Route("/blog/pictureSuppression/{id}/{articleId}", name="zcomdezign_platform_pictureSuppression")
+     */
+	public function pictureSuppressionAction(Request $request, ArticlePicture $articlePicture, $id, $articleId)
+	{
+		if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+			
+			$em = $this->getDoctrine()->getManager();
+
+			$em->remove($articlePicture);
+			$em->flush();
+
+			$request->getSession()->getFlashBag()->add('info', "L'image a bien été supprimée.");
+
+			return $this->redirectToRoute('zcomdezign_platform_edition',  array('id' => $articleId));
+		}
+
+		return $this->redirectToRoute('zcomdezign_platform_homepage');
+
+	}
     
 }

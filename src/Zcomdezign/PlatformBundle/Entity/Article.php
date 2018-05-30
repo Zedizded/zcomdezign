@@ -57,6 +57,11 @@ class Article
      */
     private $comments;
     
+    /**
+     * @ORM\OneToOne(targetEntity="Zcomdezign\PlatformBundle\Entity\ArticlePicture", cascade={"persist", "remove"})
+     */
+    private $articlePicture;
+    
     
     public function __construct()
     {
@@ -202,6 +207,30 @@ class Article
     public function getComments()
     {
         return $this->comments;
+    }
+    
+    /**
+     * Set articlePicture
+     *
+     * @param \Zcomdezign\PlatformBundle\Entity\ArticlePicture $articlePicture
+     *
+     * @return Article
+     */
+    public function setArticlePicture(\Zcomdezign\PlatformBundle\Entity\ArticlePicture $articlePicture = null)
+    {
+        $this->articlePicture = $articlePicture;
+
+        return $this;
+    }
+
+    /**
+     * Get articlePicture
+     *
+     * @return \Zcomdezign\PlatformBundle\Entity\ArticlePicture
+     */
+    public function getArticlePicture()
+    {
+        return $this->articlePicture;
     }
 }
 
