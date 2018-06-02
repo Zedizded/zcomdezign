@@ -58,7 +58,7 @@ class Article
     private $comments;
     
     /**
-     * @ORM\OneToOne(targetEntity="Zcomdezign\PlatformBundle\Entity\ArticlePicture", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Zcomdezign\PlatformBundle\Entity\ArticlePicture", mappedBy="article", cascade={"persist", "remove"})
      */
     private $articlePicture;
     

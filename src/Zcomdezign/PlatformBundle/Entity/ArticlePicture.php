@@ -45,6 +45,11 @@ class ArticlePicture
     private $path;
 
     private $file;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Zcomdezign\PlatformBundle\Entity\Article", inversedBy="articlePicture")
+     */
+    private $article;
 
     public function getUploadRootDir()
     {
@@ -197,6 +202,30 @@ class ArticlePicture
     public function getRandom()
     {
         return $this->random;
+    }
+    
+    /**
+     * Set article
+     *
+     * @param \Zcomdezign\PlatformBundle\Entity\Article $article
+     *
+     * @return ArticlePicture
+     */
+    public function setArticle(\Zcomdezign\PlatformBundle\Entity\Article $article = null)
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return \Zcomdezign\PlatformBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
     }
 
 }
