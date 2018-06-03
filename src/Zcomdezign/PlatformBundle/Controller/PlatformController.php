@@ -11,6 +11,8 @@ use Zcomdezign\PlatformBundle\Entity\ArticlePicture;
 use Zcomdezign\PlatformBundle\Entity\Comment;
 use Zcomdezign\PlatformBundle\Form\ArticleType;
 use Zcomdezign\PlatformBundle\Form\CommentType;
+use Zcomdezign\PlatformBundle\Entity\Search;
+use Zcomdezign\PlatformBundle\Form\SearchType;
 
 class PlatformController extends Controller
 {	
@@ -25,14 +27,29 @@ class PlatformController extends Controller
     /**
      * @Route("/blog", name="zcomdezign_platform_blog")
      */
-	public function blogAction()
+	public function blogAction(Request $request)
 	{
+        $search = new Search();
+		$form = $this->get('form.factory')->create(SearchType::class, $search);
 		$em = $this->getDoctrine()->getManager();
 
-		$articles = $em->getRepository('ZcomdezignPlatformBundle:Article')->findAll();
+		if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+
+			$content = $search->getContent();
+
+			$articles = $em->getRepository('ZcomdezignPlatformBundle:Article')->complexFind($content);
+
+			$search = new Search();
+			$form = $this->get('form.factory')->create(SearchType::class, $search);
+
+		} 
+		else {
+			$articles = $em->getRepository('ZcomdezignPlatformBundle:Article')->classicFind();
+		}
 
 		return $this->render('ZcomdezignPlatformBundle:Default:blog.html.twig', array(
-			'articles' => $articles
+			'articles' => $articles,
+            'form' => $form->createView()
 			));
 	}
     
