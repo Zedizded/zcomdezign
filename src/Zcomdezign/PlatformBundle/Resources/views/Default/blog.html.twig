@@ -2,6 +2,8 @@
 
 {% extends "ZcomdezignPlatformBundle::layout.html.twig" %}
 
+{% set blogPage = true %}
+
 
 {% block body %}
 	
@@ -17,12 +19,13 @@
 				<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
             </span>
         </div>
-
+        
         {{ form_rest(form) }}
         {{ form_end(form) }}
 
         {% if articles is empty %}
             <p>aucun article trouvé</p>
+            
         {% else %}
             {% for article in articles|reverse %}
                 <div class="blogArticle">
